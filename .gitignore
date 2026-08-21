@@ -1,0 +1,16 @@
+.venv/
+.venv-build/
+.test-deps/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+build-output/
+build/lib/
+src/*.egg-info/
+dist/
+releases/
+.build-deps/
+*.spec.bak
+*.log
