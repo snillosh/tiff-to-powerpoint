@@ -23,8 +23,8 @@ def run_packaged_self_test() -> None:
 
     with tempfile.TemporaryDirectory(prefix="tiff-pptx-self-test-") as temporary:
         root = Path(temporary)
-        normal = root / "BlueE8_1.tif"
-        volume = root / "BlueE8_1_Volume_Viewer_1.tif"
+        normal = root / "G10_1H_2.tif"
+        volume = root / "G10_1H_Volume_Viewer_2.tif"
         Image.new("RGB", (120, 60), (20, 80, 160)).save(normal, format="TIFF")
         Image.new("RGB", (120, 60), (160, 80, 20)).save(volume, format="TIFF")
 
@@ -42,4 +42,3 @@ def run_packaged_self_test() -> None:
         if len(Presentation(output).slides) != 1:
             raise RuntimeError("Packaged self-test could not reopen the generated presentation.")
         LOGGER.info("Packaged self-test completed successfully")
-

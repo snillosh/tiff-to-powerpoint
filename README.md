@@ -40,9 +40,9 @@ bundled in the source and packaged executable.
 The required values are:
 
 - **Primary:** one capital letter immediately followed by one or more digits, such as `A1`, `E9`, or `Z100`.
-- **Sub-component:** exactly one standalone, non-negative integer token after the Volume Viewer marker has been removed.
+- **Sub-component:** the first delimiter-separated token, scanning left to right, whose entire value consists only of digits.
 - **Colour:** optional recognised CSS colour name, compared case-insensitively and stored in canonical form.
-- **Volume Viewer:** true when `Volume_Viewer_1` is present. With a custom delimiter, the corresponding marker is also supported—for example `Volume-Viewer-1`.
+- **Volume Viewer:** true when adjacent tokens equal `Volume` and `Viewer` (case-insensitively). The configured delimiter determines token boundaries, so `_` recognises `Volume_Viewer` and `-` recognises `Volume-Viewer`.
 
 Examples using the default `_` delimiter:
 
@@ -56,11 +56,17 @@ Examples using the default `_` delimiter:
 | `BlueE6_30MIN_1_Volume_Viewer_1.tif` | E6 | 1 | Blue | Yes |
 | `BlueE8_30MIN_100.tif` | E8 | 100 | Blue | No |
 | `RedE8_30MIN_100_Volume_Viewer_1.tif` | E8 | 100 | Red | Yes |
+| `F10_30MIN_Volume_Viewer_1.tif` | F10 | 1 | — | Yes |
+| `G10_1H_Volume_Viewer_2.tif` | G10 | 2 | — | Yes |
+| `E8_100_Test_200_Volume_Viewer_300.tif` | E8 | 100 | — | Yes |
 
-`30MIN` is ignored because it is not a standalone integer. The Volume Viewer
-marker is detected and removed before numeric tokens are examined, so its final
-`1` cannot become the sub-component. If a filename has no primary/sub-component,
-or has multiple possible values, it is listed as unparseable and skipped.
+Tokens such as `30MIN`, `1H`, `H1`, `ABC12`, `12ABC`, and the primary itself are
+not standalone integers. Volume Viewer detection is independent of numeric-token
+selection: the number after `Viewer` is an ordinary token. It becomes the
+sub-component when it is the first standalone integer, as in
+`G10_1H_Volume_Viewer_2.tif`; it is ignored when an earlier integer exists, as in
+`BlueE8_100_Volume_Viewer_1.tif`. If no standalone integer exists, the file is
+listed as unparseable and skipped.
 
 Colour recognition supports both colours touching a primary (`BlueE8_1.tif`) and
 complete delimiter-separated colour tokens (`Sample_Blue_E8_1.tif`). It does not
@@ -189,14 +195,14 @@ Example outputs:
 
 ```text
 build-output/linux-x86_64/TIFFToPowerPoint/
-releases/TIFFToPowerPoint-1.0.0-linux-x86_64.tar.gz
-releases/TIFFToPowerPoint-1.0.0-linux-x86_64.tar.gz.sha256
+releases/TIFFToPowerPoint-1.0.1-linux-x86_64.tar.gz
+releases/TIFFToPowerPoint-1.0.1-linux-x86_64.tar.gz.sha256
 
 build-output/windows-x86_64/TIFFToPowerPoint/
-releases/TIFFToPowerPoint-1.0.0-windows-x86_64.zip
+releases/TIFFToPowerPoint-1.0.1-windows-x86_64.zip
 
 build-output/macos-arm64/TIFFToPowerPoint.app/
-releases/TIFFToPowerPoint-1.0.0-macos-arm64.tar.gz
+releases/TIFFToPowerPoint-1.0.1-macos-arm64.tar.gz
 ```
 
 Extract the archive on a matching OS/architecture and launch the native executable

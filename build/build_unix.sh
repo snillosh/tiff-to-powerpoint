@@ -10,6 +10,5 @@ if [[ ! -x ".venv-build/bin/python" ]]; then
 fi
 
 .venv-build/bin/python -m pip install --upgrade pip
-.venv-build/bin/python -m pip install '.[dev,build]'
+.venv-build/bin/python -m pip install --upgrade -e '.[dev,build]'
 .venv-build/bin/python build/build.py "$@"
-

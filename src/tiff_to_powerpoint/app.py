@@ -7,6 +7,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 
+from tiff_to_powerpoint import __version__
 from tiff_to_powerpoint.gui.main_window import MainWindow
 from tiff_to_powerpoint.logging_config import configure_logging
 
@@ -42,5 +43,5 @@ def main() -> int:
     sys.excepthook = handle_unexpected
     window = MainWindow(log_path)
     window.show()
-    LOGGER.info("Application started")
+    LOGGER.info("Application version %s started", __version__)
     return app.exec()

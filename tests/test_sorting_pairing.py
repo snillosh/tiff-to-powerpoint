@@ -5,6 +5,7 @@ import pytest
 from tiff_to_powerpoint.errors import DuplicateImageError
 from tiff_to_powerpoint.models import ParsedImage
 from tiff_to_powerpoint.pairing import pair_images, paginate_pairs
+from tiff_to_powerpoint.parser import parse_tiff_filename
 from tiff_to_powerpoint.sorting import natural_sorted
 
 
@@ -41,6 +42,18 @@ def test_missing_normal_is_retained():
     assert len(result.unmatched_volume_viewers) == 1
 
 
+def test_new_volume_viewer_filename_form_pairs_with_normal_image():
+    normal = parse_tiff_filename("G10_1H_2.tif")
+    volume_viewer = parse_tiff_filename("G10_1H_Volume_Viewer_2.tif")
+
+    result = pair_images([normal, volume_viewer])
+
+    assert len(result.pairs) == 1
+    assert result.pairs[0].is_matched
+    assert result.pairs[0].key.primary == "G10"
+    assert result.pairs[0].key.sub_component == 2
+
+
 def test_duplicate_slot_fails_with_both_filenames():
     first = image("first.tif", "E9", 1)
     second = image("second.tif", "E9", 1)
@@ -72,4 +85,3 @@ def test_pagination_occurs_after_numeric_sorting_and_never_mixes_primaries():
 def test_max_columns_must_be_positive():
     with pytest.raises(ValueError):
         paginate_pairs(pair_images([image("E1_1.tif", "E1", 1)]), 0)
-

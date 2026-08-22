@@ -16,7 +16,7 @@ if not exist ".venv-build\Scripts\python.exe" (
 call ".venv-build\Scripts\activate.bat"
 python -m pip install --upgrade pip
 if errorlevel 1 exit /b 1
-python -m pip install ".[dev,build]"
+python -m pip install --upgrade -e ".[dev,build]"
 if errorlevel 1 exit /b 1
 python build\build.py
 if errorlevel 1 exit /b 1
